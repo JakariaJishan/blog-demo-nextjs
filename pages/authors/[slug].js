@@ -2,7 +2,6 @@ import React from 'react';
 import { getAllAuthor, getAuthorBySlug } from '../../lib/api';
 
 const Author = ({author}) => {
-    console.log(author)
     return (
         <div>
             the author- {author.name}
