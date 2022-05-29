@@ -23,7 +23,7 @@ const Posts = ({ posts }) => {
 
 export default Posts;
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   return {
     props: {
         posts: getAllPosts()
