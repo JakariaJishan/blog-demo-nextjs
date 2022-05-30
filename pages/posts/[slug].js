@@ -1,11 +1,16 @@
+import Link from "next/link";
 import React from "react";
-import { getAllPosts, getPostBySlug } from "../../lib/api";
-
+import { getAllPosts, getAuthorBySlug, getPostBySlug } from "../../lib/api";
 const Slug = ({ post }) => {
   return (
     <div>
-      <h1>{post.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: post.body }}></div>
+      <Link href={`${post.author.parmalink}`}>
+        <a>
+          <h1>{post.author.name}</h1>
+        </a>
+      </Link>
+
+      <div dangerouslySetInnerHTML={{ __html: post.body }} />
     </div>
   );
 };
@@ -23,9 +28,15 @@ export async function getStaticPaths() {
   };
 }
 export async function getStaticProps({ params }) {
+  const post = getPostBySlug(params.slug);
+  const author = getAuthorBySlug(post.author);
+  // console.log(post,author)
   return {
     props: {
-      post: getPostBySlug(params.slug),
+      post: {
+        ...post,
+        author,
+      },
     },
   };
 }

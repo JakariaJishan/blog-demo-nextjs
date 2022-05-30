@@ -1,10 +1,11 @@
-import Link from 'next/link';
+import Link from "next/link";
 import React from "react";
-import { getAllAuthor } from "../../lib/api";
+import { getAllAuthor, getAllPosts } from "../../lib/api";
 const Authors = ({ authors }) => {
+  console.log(authors.allauthor);
   return (
     <div>
-      {authors.map((author) => (
+      {authors.allauthor.map((author) => (
         <div key={author.slug}>
             <h2>
                 <Link href={author.parmalink} >
@@ -13,6 +14,7 @@ const Authors = ({ authors }) => {
                 <Link href={author.parmalink} >
                     <a> go to profile 👉</a>
                 </Link>
+                {author.posts.length }
                 <hr />
             </h2>
         </div>
@@ -24,9 +26,21 @@ const Authors = ({ authors }) => {
 export default Authors;
 
 export async function getStaticProps() {
+  const allPosts = getAllAuthor();
+  const allauthor = allPosts.map((author) => {
+    
+   const posts =   getAllPosts().filter((post) => post.author === author.slug);
+   return {
+     ...author,
+     posts
+   }
+   
+  })
   return {
     props: {
-      authors: getAllAuthor(),
+      authors: {
+        allauthor
+      },
     },
   };
 }

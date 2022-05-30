@@ -1,10 +1,11 @@
 import React from 'react';
-import { getAllAuthor, getAuthorBySlug } from '../../lib/api';
+import { getAllAuthor, getAllPosts, getAuthorBySlug } from '../../lib/api';
 
 const Author = ({author}) => {
     return (
         <div>
-            the author- {author.name}
+            <h2>{author.name}</h2>
+            posts: {author.posts.length}
         </div>
     );
 };
@@ -12,9 +13,14 @@ const Author = ({author}) => {
 export default Author;
 
 export async function getStaticProps({params}) {
+    const author = getAuthorBySlug(params.slug)
+    const posts = getAllPosts().filter(post => post.author == author.slug)
     return {
         props: {
-            author: getAuthorBySlug(params.slug)
+            author: {
+                ...author,
+                posts
+            }
         }
     }
 }
